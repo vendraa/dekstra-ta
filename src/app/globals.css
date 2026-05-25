@@ -1,0 +1,163 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-heading: var(--font-heading);
+    --font-body: var(--font-body);
+
+    --color-primary: #209d75;
+    --color-secondary: #f4b400;
+    --color-danger: #d32f2f;
+    --color-muted: #cbcbcb;
+
+    --color-foreground: #3a3a3a;
+    --color-white: #ffffff;
+
+    --color-background: #ddfff0;
+    --color-secondary-background: #F4F5F9;
+    --color-surface: #f9f9f9;
+
+    --color-border: #cccdcc;
+
+    --shadow-card: 0 50px 50px rgba(0, 0, 0, 0.1);
+    --shadow-modal: 0 20px 40px rgba(0, 0, 0, 0.15);
+    --shadow-button: 7px 7px 15px rgba(0, 0, 0, 0.2); /* FIX: tambah ; */
+
+    --status-rejected-bg: #fee2e2;
+    --status-rejected-text: #b91c1c;
+
+    --status-approved-bg: #dcfce7;
+    --status-approved-text: #15803d;
+
+    --status-rt-bg: #fef9c3;
+    --status-rt-text: #a16207;
+
+    --status-rw-bg: #dbeafe;
+    --status-rw-text: #1d4ed8;
+
+    --status-admin-bg: #f3e8ff;
+    --status-admin-text: #7e22ce;
+
+    --status-kades-bg: #e0e7ff;
+    --status-kades-text: #4338ca;
+
+    --status-default-bg: #f3f4f6;
+    --status-default-text: #4b5563;
+  }
+}
+
+@layer base {
+  body {
+    font-family: var(--font-body);
+    color: var(--color-foreground);
+  }
+}
+
+@theme {
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
+
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-danger: var(--color-danger);
+
+  --color-foreground: var(--color-foreground);
+  --color-muted: var(--color-muted);
+  --color-white: var(--color-white);
+
+  --color-background: var(--color-background);
+  --color-secondary-background: var(--color-secondary-background);
+  --color-surface: var(--color-surface);
+  --color-border: var(--color-border);
+
+  --shadow-card: var(--shadow-card);
+  --shadow-modal: var(--shadow-modal);
+  --shadow-button: var(--shadow-button); 
+}
+
+/* =========================
+   CUSTOM STATUS BADGE STYLES
+   ========================= */
+
+.status-rejected {
+  background-color: var(--status-rejected-bg);
+  color: var(--status-rejected-text);
+}
+
+.status-approved {
+  background-color: var(--status-approved-bg);
+  color: var(--status-approved-text);
+}
+
+.status-rt-review {
+  background-color: var(--status-rt-bg);
+  color: var(--status-rt-text);
+}
+
+.status-rw-review {
+  background-color: var(--status-rw-bg);
+  color: var(--status-rw-text);
+}
+
+.status-admin-review {
+  background-color: var(--status-admin-bg);
+  color: var(--status-admin-text);
+}
+
+.status-kades-sign {
+  background-color: var(--status-kades-bg);
+  color: var(--status-kades-text);
+}
+
+.status-default {
+  background-color: var(--status-default-bg);
+  color: var(--status-default-text);
+}
+
+/* =========================
+   CUSTOM SCROLLBAR STYLES
+   ========================= */
+
+.custom-scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.5);
+  border-radius: 999px;
+}
+.custom-scrollbar-thin:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.8);
+}
+.custom-scrollbar-thin::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* =========================
+   CUSTOM CARD WITH TABS STYLES
+   ========================= */
+
+.cwt-tab-active::before,
+.cwt-tab-active::after {
+  content: '';
+  position: absolute;
+  bottom: 0px;
+  width: 16px;
+  height: 16px;
+  background: var(--color-background);
+  pointer-events: none;
+}
+
+.cwt-tab-active::before {
+  left: -16px;
+  border-bottom-right-radius: 16px;
+  box-shadow: 6px 6px 0 6px white;
+}
+
+.cwt-tab-active::after {
+  right: -16px;
+  border-bottom-left-radius: 16px;
+  box-shadow: -6px 6px 0 6px white;
+}
