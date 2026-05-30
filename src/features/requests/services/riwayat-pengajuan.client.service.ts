@@ -11,15 +11,13 @@ type ErrorResponse = {
   message?: string;
 };
 
-export async function getRiwayatPengajuan(
-  cache: RequestCache = "no-store"
-): Promise<LetterRequest[]> {
+export async function getRiwayatPengajuanClient(): Promise<LetterRequest[]> {
   try {
     const data = await apiFetch<RiwayatPersetujuanResponse[]>(
       "/api/riwayat-pengajuan",
       {
         method: "GET",
-        cache,
+        cache: "no-store",
       }
     );
 

@@ -59,8 +59,6 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(errorResponse, { status: 500 });
     }
 
-    console.log("NOTIFIKASI DATA:", data);
-
     return NextResponse.json(data, { status: 200 });
   } catch (error) {
     console.error("NEXT API ERROR:", error);

@@ -32,8 +32,7 @@ interface TableContextType<T> {
   dataLength: number;
   totalRows: number;
   pageCount: number;
-  // FIX: Ekspos pagination dan globalFilter state langsung ke context
-  // agar consumers re-render ketika nilai ini berubah.
+
   pagination: PaginationState;
   globalFilter: string;
   columnFilters: ColumnFiltersState;
@@ -41,11 +40,20 @@ interface TableContextType<T> {
 
 /* ================= CONTEXT ================= */
 
-const TableContext = createContext<TableContextType<unknown> | null>(null);
+const TableContext =
+  createContext<TableContextType<unknown> | null>(
+    null
+  );
 
 export function useTable<T>() {
   const ctx = useContext(TableContext);
-  if (!ctx) throw new Error("Table must be inside <TableProvider />");
+
+  if (!ctx) {
+    throw new Error(
+      "Table must be inside <TableProvider />"
+    );
+  }
+
   return ctx as TableContextType<T>;
 }
 
@@ -53,11 +61,19 @@ export function useTable<T>() {
 
 interface ProviderProps<T> {
   children: ReactNode;
+
   columns: ColumnDef<T, unknown>[];
+
   data?: T[];
+
+  loading?: boolean;
+
   fetchData?: FetchDataFn<T>;
+
   totalRows?: number;
+
   mode?: Mode;
+
   initialPageSize?: number;
 }
 
@@ -65,6 +81,7 @@ export function TableProvider<T>({
   children,
   columns,
   data = [],
+  loading: externalLoading = false,
   fetchData,
   totalRows = 0,
   mode = "client",
@@ -72,92 +89,127 @@ export function TableProvider<T>({
 }: ProviderProps<T>) {
   const isServerMode = mode === "server";
 
-  // FIX: Kedua state ini sekarang ikut masuk ke context value.
-  // Ketika setPageIndex / setPageSize dipanggil, TanStack memanggil
-  // onPaginationChange → setPagination → React state berubah →
-  // context value baru dibuat → semua consumers otomatis re-render.
-  const [globalFilter, setGlobalFilter] = useState("");
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: initialPageSize,
-  });
+  /* ================= TABLE STATE ================= */
+
+  const [globalFilter, setGlobalFilter] =
+    useState("");
+
+  const [columnFilters, setColumnFilters] =
+    useState<ColumnFiltersState>([]);
+
+  const [pagination, setPagination] =
+    useState<PaginationState>({
+      pageIndex: 0,
+      pageSize: initialPageSize,
+    });
 
   /* ================= SERVER STATE ================= */
 
-  const [serverData, setServerData] = useState<T[]>([]);
-  const [serverTotal, setServerTotal] = useState<number>(totalRows);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [serverData, setServerData] = useState<T[]>(
+    []
+  );
 
-  /* ================= FETCH EFFECT ================= */
+  const [serverTotal, setServerTotal] =
+    useState<number>(totalRows);
+
+  const [internalLoading, setInternalLoading] =
+    useState<boolean>(isServerMode);
+
+  /* ================= RESET PAGE ================= */
+
+  useEffect(() => {
+    setPagination((prev) => ({
+      ...prev,
+      pageIndex: 0,
+    }));
+  }, [globalFilter, columnFilters]);
+
+  /* ================= SERVER FETCH ================= */
 
   useEffect(() => {
     if (!isServerMode || !fetchData) return;
 
+    const serverFetch = fetchData;
+
     let cancelled = false;
 
-    const load = async () => {
+    async function load() {
       try {
-        setLoading(true);
-        const result = await fetchData({
+        setInternalLoading(true);
+
+        const result = await serverFetch({
           pageIndex: pagination.pageIndex,
           pageSize: pagination.pageSize,
           search: globalFilter,
           filters: columnFilters,
         });
+
         if (cancelled) return;
+
         setServerData(result.data ?? []);
+
         setServerTotal(result.totalRows ?? 0);
+
       } catch (error) {
-        console.error("❌ Table fetch error:", error);
+        console.error(
+          "❌ Table fetch error:",
+          error
+        );
+
         if (!cancelled) {
           setServerData([]);
           setServerTotal(0);
         }
+
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) {
+          setInternalLoading(false);
+        }
       }
-    };
+    }
 
     load();
+
     return () => {
       cancelled = true;
     };
+
   }, [
     isServerMode,
     fetchData,
     pagination.pageIndex,
     pagination.pageSize,
     globalFilter,
-    columnFilters
+    columnFilters,
   ]);
-
-  useEffect(() => {
-  setPagination((prev) => ({
-    ...prev,
-    pageIndex: 0,
-  }));
-}, [globalFilter, columnFilters]);
 
   /* ================= FINAL DATA ================= */
 
-  const finalData = useMemo(
-    () => (isServerMode ? serverData : data),
-    [isServerMode, serverData, data]
-  );
+  const finalData = useMemo(() => {
+    return isServerMode ? serverData : data;
+  }, [isServerMode, serverData, data]);
 
   /* ================= PAGE COUNT ================= */
 
-  const calculatedPageCount = useMemo(() => {
-    if (!isServerMode) return -1;
-    return Math.ceil(serverTotal / pagination.pageSize);
-  }, [isServerMode, serverTotal, pagination.pageSize]);
+  const pageCount = useMemo(() => {
+    if (!isServerMode) return undefined;
 
-  /* ================= TABLE INSTANCE ================= */
+    return Math.ceil(
+      serverTotal / pagination.pageSize
+    );
+  }, [
+    isServerMode,
+    serverTotal,
+    pagination.pageSize,
+  ]);
+
+  /* ================= TABLE ================= */
 
   const table = useReactTable<T>({
     data: finalData,
+
     columns,
+
     state: {
       pagination,
       globalFilter,
@@ -165,42 +217,65 @@ export function TableProvider<T>({
     },
 
     onPaginationChange: setPagination,
+
     onGlobalFilterChange: setGlobalFilter,
+
     onColumnFiltersChange: setColumnFilters,
 
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
+
+    getPaginationRowModel:
+      getPaginationRowModel(),
+
+    ...(isServerMode
+      ? {}
+      : {
+          getFilteredRowModel:
+            getFilteredRowModel(),
+        }),
 
     manualPagination: isServerMode,
+
     manualFiltering: isServerMode,
 
-    ...(isServerMode && calculatedPageCount > 0
-      ? { pageCount: calculatedPageCount }
+    ...(isServerMode && pageCount
+      ? { pageCount }
       : {}),
   });
 
-  /* ================= CONTEXT VALUE ================= */
+  /* ================= TOTAL ROWS ================= */
 
   const finalTotalRows = isServerMode
     ? serverTotal
     : table.getFilteredRowModel().rows.length;
 
+  /* ================= CONTEXT ================= */
+
   const value: TableContextType<T> = {
     table,
-    loading,
+
+    loading:
+      externalLoading || internalLoading,
+
     dataLength: finalData.length,
+
     totalRows: finalTotalRows,
+
     pageCount: table.getPageCount(),
-    // FIX: Sertakan state ini agar perubahan pagination/filter
-    // menyebabkan context re-render ke semua consumers.
+
     pagination,
+
     globalFilter,
+
     columnFilters,
   };
 
   return (
-    <TableContext.Provider value={value as TableContextType<unknown>}>
+    <TableContext.Provider
+      value={
+        value as TableContextType<unknown>
+      }
+    >
       {children}
     </TableContext.Provider>
   );

@@ -6,17 +6,17 @@ import { DashboardContent } from "@/features/dashboard/components/DashboardConte
 
 import { DashboardWargaTableCSR } from "@/features/requests/ui/table/dashboard-warga/DashboardWargaTableCSR";
 
-export default function DashboardPage() {
+export default function DashboardCSRPage() {
   const { profile, loading } = useProfile();
 
   return (
     <DashboardContent
       name={profile?.name ?? "John Doe"}
       loading={loading}
-      dashboardHref="/dashboard"
       dashboardTable={
         <DashboardWargaTableCSR />
       }
+      dashboardHref="/dashboard-csr"
     />
   );
 }

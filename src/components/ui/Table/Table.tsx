@@ -4,12 +4,13 @@ import { ColumnDef, flexRender } from "@tanstack/react-table";
 import { TableProvider, useTable } from "./TableContext";
 import { ReactNode } from "react";
 import { FetchDataFn } from "./types";
-import { 
+
+import {
   TableWrapper,
   TableHeader,
   TableBody,
   TableRow,
-  TableCell, 
+  TableCell,
 } from "./TablePrimitives";
 
 import { TablePagination } from "./TablePagination";
@@ -22,6 +23,10 @@ type Mode = "client" | "server";
 interface Props<T> {
   columns: ColumnDef<T>[];
   data?: T[];
+
+  // NEW
+  loading?: boolean;
+
   fetchData?: FetchDataFn<T>;
   totalRows?: number;
   mode?: Mode;
@@ -47,14 +52,16 @@ function InternalTable<T>({
   showPagination: boolean;
   filters?: ReactNode;
 }) {
-  const { table, loading, dataLength } = useTable<T>();
-  
+  const {
+    table,
+    loading,
+    dataLength,
+  } = useTable<T>();
+
   return (
     <>
-      {/* Top Controls */}
       {(showSearch || showPageSize || filters) && (
         <div className="flex justify-between items-center mb-4 gap-4">
-
           {showPageSize && <TablePageSize />}
 
           <div className="flex items-center gap-3">
@@ -69,7 +76,11 @@ function InternalTable<T>({
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableCell key={header.id} as="th" className="font-semibold">
+                <TableCell
+                  key={header.id}
+                  as="th"
+                  className="font-semibold"
+                >
                   {header.isPlaceholder
                     ? null
                     : flexRender(
@@ -83,7 +94,6 @@ function InternalTable<T>({
         </TableHeader>
 
         <TableBody>
-          {/* Conditional rendering */}
           {loading || dataLength === 0 ? (
             <TableState />
           ) : (
@@ -103,13 +113,11 @@ function InternalTable<T>({
         </TableBody>
       </TableWrapper>
 
-      {/* Bottom Pagination */}
       {showPagination && (
         <div>
           <TablePagination />
         </div>
       )}
-
     </>
   );
 }
@@ -121,10 +129,14 @@ export default function Table<T extends object>({
   showPageSize = true,
   showPagination = true,
   filters,
+  loading = false,
   ...props
 }: Props<T>) {
   return (
-    <TableProvider<T> {...props}>
+    <TableProvider<T>
+      {...props}
+      loading={loading}
+    >
       <div className="w-full space-y-4">
         <InternalTable
           showSearch={showSearch}

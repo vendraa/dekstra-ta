@@ -1,16 +1,23 @@
-import { Profile } from "../types/profile.types";
+import { apiFetch } from "@/lib/api/api-fetch";
+import {
+  Profile,
+  UserProfile,
+} from "../types/profile.types";
+import { mapProfileToUserProfile } from "../mapper/profile.mapper";
 
-export async function getProfile(): Promise<Profile> {
-  const res = await fetch("/api/profile", {
-    method: "GET",
-    cache: "no-store",
-  });
+export async function getProfile(
+  cache: RequestCache = "no-store"
+): Promise<UserProfile | null> {
+  try {
+    const data = await apiFetch<Profile>("/api/profile", {
+      method: "GET",
+      cache,
+    });
 
-  const data = await res.json();
+    return mapProfileToUserProfile(data);
+  } catch (error) {
+    console.error("Failed to fetch profile:", error);
 
-  if (!res.ok) {
-    throw new Error(data?.message || "Gagal mengambil profile");
+    return null;
   }
-
-  return data;
 }

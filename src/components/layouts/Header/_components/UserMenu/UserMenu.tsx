@@ -8,6 +8,7 @@ import { ChevronDown, User, LogOut } from "lucide-react";
 import InitialAvatar from "../../../../ui/Avatar/InitialAvatar";
 import UserMenuDropdown from "./UserMenuDropdown";
 import { useProfile } from "@/features/profile/hooks/useProfile";
+import { TextSkeleton } from "@/components/ui/Skeleton/TextSkeleton";
 
 interface UserMenuProps {
   name?: string;
@@ -25,8 +26,7 @@ export default function UserMenu({
   const { logout } = useLogout();
 
   const { profile, loading } = useProfile();
-
-  const name = profile?.name ?? "Loading...";
+  const name = profile?.name ?? "";
   const email = profile?.email ?? "";
 
   useEffect(() => {
@@ -60,7 +60,15 @@ export default function UserMenu({
         className="flex items-center gap-2 cursor-pointer select-none"
         onClick={() => setIsOpen(!isOpen)}
       >
-        {avatarUrl ? (
+        {loading ? (
+          <div
+            className="rounded-full bg-white/20 animate-pulse"
+            style={{
+              width: size,
+              height: size,
+            }}
+          />
+        ) : avatarUrl ? (
           <Image
             src={avatarUrl}
             alt={`${name} Avatar`}
@@ -69,11 +77,22 @@ export default function UserMenu({
             className="rounded-full object-cover"
           />
         ) : (
-          <InitialAvatar name={name} size={size} />
+          <InitialAvatar
+            name={name}
+            size={size}
+          />
         )}
 
         <div className="flex items-center gap-1 text-white font-medium">
-          <span>{loading ? "..." : name}</span>
+          {loading ? (
+            <TextSkeleton
+              width="w-24"
+              height="h-5"
+            />
+          ) : (
+            <span>{name}</span>
+          )}
+
           <ChevronDown className="w-4 h-4" />
         </div>
       </div>
@@ -83,7 +102,7 @@ export default function UserMenu({
         triggerRef={menuRef}
         items={dropdownItems}
         userName={name}
-        userEmail={email} // 🔥 TAMBAH INI
+        userEmail={email}
         avatarUrl={avatarUrl}
         avatarSize={size}
       />

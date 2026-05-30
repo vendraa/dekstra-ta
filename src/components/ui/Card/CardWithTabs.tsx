@@ -3,13 +3,28 @@
 import { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LucideIcon } from "lucide-react";
+import {
+  Home,
+  Plus,
+  Clock,
+} from "lucide-react";
 import clsx from "clsx";
+
+const ICONS = {
+  home: Home,
+  plus: Plus,
+  clock: Clock,
+};
+
+export type TabIcon =
+  | "home"
+  | "plus"
+  | "clock";
 
 export interface Tab {
   label: string;
   href: string;
-  icon?: LucideIcon;
+  icon?: TabIcon;
   content?: ReactNode;
 }
 
@@ -35,7 +50,9 @@ export default function CardWithTabs({
       <div className="flex items-end overflow-visible px-4 sm:px-8 gap-1">
         {tabs.map((tab) => {
           const isActive = pathname === tab.href;
-          const Icon = tab.icon;
+          const Icon = tab.icon
+            ? ICONS[tab.icon]
+            : undefined;
 
           return (
             <Link
