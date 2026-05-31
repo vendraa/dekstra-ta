@@ -8,18 +8,22 @@ interface CreateMainTabsProps {
   dashboardTable: React.ReactNode;
 
   dashboardHref: string;
+
+  pengajuanBaruHref: string;
+
+  pengajuanBaruContent?: React.ReactNode;
 }
 
 export function createMainTabs({
   dashboardTable,
   dashboardHref,
+  pengajuanBaruHref,
+  pengajuanBaruContent,
 }: CreateMainTabsProps): Tab[] {
   return [
     {
       label: "Daftar Pengajuan",
-
       href: dashboardHref,
-
       icon: "home",
 
       content: (
@@ -36,11 +40,13 @@ export function createMainTabs({
     {
       label: "Pengajuan Baru",
 
-      href: "/pengajuan-baru",
+      href: pengajuanBaruHref,
 
       icon: "plus",
 
-      content: <MainSection />,
+      content:
+        pengajuanBaruContent ??
+        <MainSection />,
     },
 
     {
