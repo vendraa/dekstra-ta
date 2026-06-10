@@ -17,6 +17,7 @@ export default function DashboardCSRPage() {
         <DashboardWargaTableCSR />
       }
       dashboardHref="/dashboard-csr"
+      pengajuanBaruHref="/pengajuan-baru-csr"
     />
   );
 }

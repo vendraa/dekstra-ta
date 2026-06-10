@@ -6,7 +6,11 @@ import { createMainTabs } from "@/features/navigation/dashboard-warga/navigation
 interface DashboardContentProps {
   name: string;
   loading?: boolean;
+
   dashboardHref: string;
+
+  pengajuanBaruHref: string;
+
   dashboardTable: React.ReactNode;
 }
 
@@ -15,10 +19,12 @@ export function DashboardContent({
   loading = false,
   dashboardTable,
   dashboardHref,
+  pengajuanBaruHref,
 }: DashboardContentProps) {
   const tabs = createMainTabs({
     dashboardTable,
     dashboardHref,
+    pengajuanBaruHref,
   });
 
   return (

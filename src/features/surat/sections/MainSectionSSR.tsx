@@ -13,6 +13,7 @@ export async function MainSectionSSR() {
   return (
     <MainSectionContent
       suratData={data}
+      basePath="/pengajuan-baru-ssr"
     />
   );
 }

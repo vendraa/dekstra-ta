@@ -18,6 +18,7 @@ export default async function DashboardSSRPage() {
         <DashboardWargaTableSSR />
       }
       dashboardHref="/dashboard-ssr"
+      pengajuanBaruHref="/pengajuan-baru-ssr"
     />
   );
 }

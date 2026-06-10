@@ -17,6 +17,7 @@ export default async function DashboardSSGPage() {
         <DashboardWargaTableSSG />
       }
       dashboardHref="/dashboard-ssg"
+      pengajuanBaruHref="/pengajuan-baru-ssg"
     />
   );
 }

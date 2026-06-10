@@ -6,18 +6,19 @@ import { Breadcrumb } from "@/components/ui/Breadcrumb/Breadcrumb";
 
 import { createMainTabs } from "@/features/navigation/dashboard-warga/navigation-tabs";
 
-import { DashboardWargaTableCSR } from "@/features/requests/ui/table/dashboard-warga/DashboardWargaTableCSR";
-
 import { HeaderSection } from "./_sections/header-section";
+import { DashboardWargaTable } from "@/features/requests/ui/table/dashboard-warga/DashboardWargaTable";
 
 export default function SuratPage() {
-  const tabs = createMainTabs({
-    dashboardTable: (
-      <DashboardWargaTableCSR />
-    ),
+const tabs = createMainTabs({
+  dashboardTable: (
+    <DashboardWargaTable />
+  ),
 
-    dashboardHref: "/dashboard-csr",
-  });
+  dashboardHref: "/dashboard",
+
+  pengajuanBaruHref: "/pengajuan-baru",
+});
 
   return (
     <div className="space-y-6 px-6">

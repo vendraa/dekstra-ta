@@ -14,10 +14,12 @@ import { SuratGrid } from "@/features/surat/components/surat-grid";
 
 interface Props {
   suratData: SuratConfig[];
+  basePath: string;
 }
 
 export function MainSectionContent({
   suratData,
+  basePath,
 }: Props) {
   const router = useRouter();
 
@@ -60,7 +62,7 @@ export function MainSectionContent({
     slug: string
   ) {
     router.push(
-      `/pengajuan-baru/${slug}`
+      `${basePath}/${slug}`
     );
   }
 

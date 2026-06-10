@@ -55,6 +55,7 @@ export function MainSectionCSR() {
   return (
     <MainSectionContent
       suratData={data}
+      basePath="/pengajuan-baru-csr"
     />
   );
 }
