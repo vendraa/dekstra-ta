@@ -8,7 +8,7 @@ export async function getProfileStatic(): Promise<UserProfile> {
 
     kk: "3322000000000000",
 
-    name: "Warga Demo",
+    name: "Test User",
 
     birthPlace: "Semarang",
 
