@@ -11,11 +11,9 @@ import { DashboardWargaTableCSR } from "@/features/requests/ui/table/dashboard-w
 export default function RiwayatPengajuanPage() {
 
   const tabs = createMainTabs({
-    dashboardTable: (
-      <DashboardWargaTableCSR />
-    ),
-
+    dashboardTable: <DashboardWargaTableCSR />,
     dashboardHref: "/dashboard-csr",
+    pengajuanBaruHref: "/pengajuan-baru",
   });
 
   return (
