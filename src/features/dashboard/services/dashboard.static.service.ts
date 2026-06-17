@@ -5,11 +5,11 @@ export async function getDashboardBuild():
 
   try {
     const token =
-      process.env.SSG_STATIC_TOKEN;
+      process.env.SSG_TOKEN_ADMIN;
 
     if (!token) {
       console.warn(
-        "[SSG] SSG_STATIC_TOKEN tidak ditemukan"
+        "[SSG] SSG_TOKEN_ADMIN tidak ditemukan"
       );
 
       return null;

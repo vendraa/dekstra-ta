@@ -1,6 +1,9 @@
 import { Role } from "../../types/types";
 
-import { getDetailPermohonanStatic } from "@/services/detail-persetujuan/detail-persetujuan.static.service";
+import {
+  getDetailPermohonanStatic,
+  StaticTestRole,
+} from "@/services/detail-persetujuan/detail-persetujuan.static.service";
 
 import { DetailPengajuanContent } from "./components/DetailPengajuanContent";
 
@@ -9,12 +12,25 @@ interface Props {
   role: Role;
 }
 
+function toStaticTestRole(role: Role): StaticTestRole {
+  const mapping: Record<Role, StaticTestRole> = {
+    WARGA: "warga",
+    RT: "rt",
+    RW: "rw",
+    ADMIN: "admin",
+    KADES: "kades",
+  };
+
+  return mapping[role];
+}
+
 export async function DetailPengajuanSSGPage({
   id,
   role,
 }: Props) {
-  const detail =
-    await getDetailPermohonanStatic(id);
+  const testRole = toStaticTestRole(role);
+
+  const detail = await getDetailPermohonanStatic(id, testRole);
 
   if (!detail) {
     return (
@@ -33,9 +49,7 @@ export async function DetailPengajuanSSGPage({
     <DetailPengajuanContent
       detail={detail}
       role={role}
-      suratMasukHref={
-        suratMasukHref
-      }
+      suratMasukHref={suratMasukHref}
     />
   );
 }

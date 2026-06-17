@@ -11,7 +11,7 @@ export async function getVerifikasiAdminBuild():
 
   try {
     const token =
-      process.env.SSG_STATIC_TOKEN;
+      process.env.SSG_TOKEN_ADMIN;
 
     if (!token) {
       return [];

@@ -6,11 +6,10 @@ import { LetterRequest } from "../types/types";
 
 export async function getRiwayatPengajuanStatic(): Promise<LetterRequest[]> {
   try {
-    // Gunakan token khusus build/testing dari env
-    const token = process.env.SSG_STATIC_TOKEN;
+    const token = process.env.SSG_TOKEN_WARGA;
 
     if (!token) {
-      console.warn("[SSG] SSG_STATIC_TOKEN tidak ditemukan, returning []");
+      console.warn("[SSG] SSG_TOKEN_WARGA tidak ditemukan, returning []");
       return [];
     }
 
@@ -22,7 +21,7 @@ export async function getRiwayatPengajuanStatic(): Promise<LetterRequest[]> {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        cache: "force-cache", // SSG: cache saat build
+        cache: "force-cache",
       }
     );
 
@@ -37,6 +36,6 @@ export async function getRiwayatPengajuanStatic(): Promise<LetterRequest[]> {
     return data.map(mapToLetterRequest);
 
   } catch {
-    return []; // Jangan throw — biarkan build tetap sukses
+    return []; 
   }
 }
