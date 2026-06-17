@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:dashboard": "tsx scripts/dashboard-test.ts"
+    "test:dashboard-warga": "tsx scripts/lighthouse/dashboard-warga-test.ts",
+    "test:layanan-surat": "tsx scripts/lighthouse/layanan-surat-test.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
