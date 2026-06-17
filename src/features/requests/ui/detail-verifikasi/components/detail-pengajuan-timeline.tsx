@@ -4,7 +4,7 @@ import {
   Send, XCircle,
   ClipboardCheck, PenLine,
 } from "lucide-react";
-import { ApprovalLog, RequestLifecycle } from "../../types/types";
+import { ApprovalLog, RequestLifecycle } from "../../../types/types";
 
 interface Props {
   lifecycle:  RequestLifecycle;

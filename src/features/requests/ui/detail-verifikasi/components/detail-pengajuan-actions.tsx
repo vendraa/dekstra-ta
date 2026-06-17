@@ -8,9 +8,9 @@ import Button from "@/components/ui/Button/Button";
 import Modal from "@/components/ui/Modal/Modal";
 import TextAreaInput from "@/components/ui/Input/TextAreaInput";
 
-import { Role } from "../../types/types";
+import { Role } from "../../../types/types";
 
-import { createRiwayatPersetujuan } from "../../services/riwayat-persetujuan.service";
+import { createRiwayatPersetujuan } from "../../../services/riwayat-persetujuan.service";
 
 interface Props {
   nomorPermohonan: string; 

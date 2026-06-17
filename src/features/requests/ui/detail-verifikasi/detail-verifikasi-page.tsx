@@ -3,13 +3,13 @@
 import { Breadcrumb } from "@/components/ui/Breadcrumb/Breadcrumb";
 import Card from "@/components/ui/Card/Card";
 import StatusBadge from "@/components/ui/Badge/StatusBadge";
-import { DetailPengajuanSection } from "./detail-pengajuan-section";
+import { DetailPengajuanSection } from "./components/detail-pengajuan-section";
 import { getFormBySlug } from "@/features/surat/forms/form-registry";
 import { Role } from "../../types/types";
 import { getRequestStatusPresentation } from "../../model/status-label";
-import { DetailPengajuanActions } from "./detail-pengajuan-actions";
-import { DetailPengajuanTimeline } from "./detail-pengajuan-timeline";
-import { DetailPengajuanBerkasTable } from "./detail-pengajuan-berkas-table";
+import { DetailPengajuanActions } from "./components/detail-pengajuan-actions";
+import { DetailPengajuanTimeline } from "./components/detail-pengajuan-timeline";
+import { DetailPengajuanBerkasTable } from "./components/detail-pengajuan-berkas-table";
 
 import { getDetailPermohonan } from "../../services/detail-persetujuan.service";
 import { mapDetailToLetterRequest } from "../../types/riwayat-persetujuan.types";

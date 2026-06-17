@@ -1,5 +1,5 @@
 import { FieldDefinition } from "@/features/surat/forms/dynamic-form/types/form.types";
-import { resolveDisplayValue } from "./helper/format-select-value";
+import { resolveDisplayValue } from "../helper/format-select-value";
 
 interface Props {
   field: FieldDefinition;
