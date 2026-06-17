@@ -1,6 +1,5 @@
 "use client";
 
-import { Users, FileCheck, FileSignature } from "lucide-react";
 import VerificationDashboard from "../components/VerificationDashboard";
 import { persetujuanKadesPreviewColumns } from "@/features/requests/ui/table/persetujuan-kades/preview-columns";
 import { useVerifikasiRequests } from "@/features/requests/hooks/useVerifikasi";
@@ -17,13 +16,13 @@ export default function KadesDashboard() {
   const mapped = mapKadesDashboard(data!);
 
   const statsWithIcon = mapped.stats.map((s) => ({
-    ...s,
-    icon:
-      s.label.includes("Total")
-        ? Users
-        : s.label.includes("Menunggu")
-        ? FileSignature
-        : FileCheck,
+    label: s.label,
+    value: s.value,
+    iconKey: s.label.includes("Penduduk")
+      ? "users"
+      : s.label.includes("Akun")
+      ? "userCog"
+      : "fileText",
   }));
 
   return (

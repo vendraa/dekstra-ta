@@ -1,6 +1,5 @@
 "use client";
 
-import { Users, FileCheck, FileText } from "lucide-react";
 import VerificationDashboard from "../components/VerificationDashboard";
 import { validasiRWPreviewColumns } from "@/features/requests/ui/table/verifikasi-rw/preview-columns";
 import { useVerifikasiRequests } from "@/features/requests/hooks/useVerifikasi";
@@ -17,13 +16,13 @@ export default function RWDashboard() {
   const mapped = mapRWDashboard(data!);
 
   const statsWithIcon = mapped.stats.map((s) => ({
-    ...s,
-    icon:
-      s.label.includes("Total")
-        ? Users
-        : s.label.includes("Menunggu")
-        ? FileText
-        : FileCheck,
+    label: s.label,
+    value: s.value,
+    iconKey: s.label.includes("Penduduk")
+      ? "users"
+      : s.label.includes("Akun")
+      ? "userCog"
+      : "fileText",
   }));
 
   return (

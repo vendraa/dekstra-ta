@@ -5,13 +5,23 @@ import { validasiAdminPreviewColumns } from "@/features/requests/ui/table/verifi
 import { useVerifikasiRequests } from "@/features/requests/hooks/useVerifikasi";
 import { useDashboardAdmin } from "../hooks/useAdminDashboard";
 import { mapAdminDashboard } from "../mapper/admin-dashboard.mapper";
+import { DashboardSkeleton } from "../components/DashboardSkeleton";
 
-export default function AdminDashboard() {
+export default function AdminDashboardCSR() {
   const { data, isLoading, error } = useDashboardAdmin();
   const fetchPreview = useVerifikasiRequests();
 
-  if (isLoading) return <div>Loading dashboard...</div>;
-  if (error) return <div>Gagal memuat dashboard admin</div>;
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
+
+  if (error) {
+    return (
+      <div className="rounded-xl bg-red-50 p-4 text-red-600">
+        Gagal memuat dashboard admin
+      </div>
+    );
+  }
 
   const mapped = mapAdminDashboard(data!);
 

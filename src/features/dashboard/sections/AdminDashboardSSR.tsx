@@ -1,19 +1,14 @@
-"use client";
-
 import VerificationDashboard from "../components/VerificationDashboard";
-import { validasiAdminPreviewColumns } from "@/features/requests/ui/table/verifikasi-admin/preview-columns";
-import { useVerifikasiRequests } from "@/features/requests/hooks/useVerifikasi";
-import { useDashboardAdmin } from "../hooks/useAdminDashboard";
+import { getDashboardServer } from "../services/dashboard.server.service";
 import { mapAdminDashboard } from "../mapper/admin-dashboard.mapper";
+import { validasiAdminPreviewColumns } from "@/features/requests/ui/table/verifikasi-admin/preview-columns";
+import { getVerifikasiAdminServer } from "@/services/dashboard-admin/verifikasi-admin.server.service";
 
-export default function AdminDashboard() {
-  const { data, isLoading, error } = useDashboardAdmin();
-  const fetchPreview = useVerifikasiRequests();
+export default async function AdminDashboardSSR() {
+  const data = await getDashboardServer("no-store");
+  const verifikasiData = await getVerifikasiAdminServer("no-store");
 
-  if (isLoading) return <div>Loading dashboard...</div>;
-  if (error) return <div>Gagal memuat dashboard admin</div>;
-
-  const mapped = mapAdminDashboard(data!);
+  const mapped = mapAdminDashboard(data);
 
   const statsWithIcon = mapped.stats.map((s) => ({
     label: s.label,
@@ -33,7 +28,7 @@ export default function AdminDashboard() {
       previewTitle="Surat yang Perlu Diverifikasi"
       previewLink="/admin/surat/verifikasi"
       columns={validasiAdminPreviewColumns}
-      fetchPreview={fetchPreview}
+      previewData={verifikasiData}
     />
   );
 }
