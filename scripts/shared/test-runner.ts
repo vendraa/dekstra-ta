@@ -11,9 +11,13 @@ import { createLighthouseConfig }
 import { runLighthouse }
   from "./lighthouse-runner";
 
+import { LighthouseRole }
+  from "./auth";
+
 export type TestPage = {
   name: string;
   url: string;
+  role: LighthouseRole;
 };
 
 type RunRenderingTestParams = {
@@ -25,16 +29,28 @@ export async function runRenderingTest({
   testName,
   pages,
 }: RunRenderingTestParams) {
-  const configPath =
-    createLighthouseConfig();
 
   console.log(
     `\n===== TEST ${testName.toUpperCase()} =====`
   );
 
   for (const page of pages) {
+
+    /**
+     * Config dibuat sekali
+     * untuk setiap role/page
+     */
+    const configPath =
+      createLighthouseConfig(
+        page.role
+      );
+
     console.log(
       `\n===== ${page.name.toUpperCase()} =====`
+    );
+
+    console.log(
+      `Role: ${page.role}`
     );
 
     const outputDir = path.join(
@@ -44,9 +60,12 @@ export async function runRenderingTest({
       page.name
     );
 
-    fs.mkdirSync(outputDir, {
-      recursive: true,
-    });
+    fs.mkdirSync(
+      outputDir,
+      {
+        recursive: true,
+      }
+    );
 
     const csvPath = path.join(
       outputDir,
@@ -62,6 +81,7 @@ export async function runRenderingTest({
       run <= RUNS;
       run++
     ) {
+
       console.log(
         `[${page.name}] Run ${run}/${RUNS}`
       );
@@ -72,6 +92,7 @@ export async function runRenderingTest({
       );
 
       try {
+
         const metrics =
           runLighthouse(
             page.url,
@@ -103,13 +124,17 @@ export async function runRenderingTest({
             formatMetric(
               metrics.tbt
             ),
+
           ].join(";")
         );
+
       } catch (error) {
+
         console.error(
           `[${page.name}] Run ${run} gagal`,
           error
         );
+
       }
     }
 

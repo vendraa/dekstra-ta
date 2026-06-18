@@ -114,7 +114,7 @@ def main():
 
     output_file = (
         base_dir
-        / "statistics.csv"
+        / "results.csv"
     )
 
     result_df.to_csv(

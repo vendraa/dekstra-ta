@@ -6,26 +6,38 @@ import {
 
 config({ path: ".env" });
 
+const BASE_URL =
+  process.env.LIGHTHOUSE_BASE_URL!;
+
 runRenderingTest({
   testName: "dashboard-warga",
 
   pages: [
     {
       name: "csr",
+
+      role: "warga",
+
       url:
-        "http://localhost:3000/dashboard-csr",
+        `${BASE_URL}/dashboard-csr`,
     },
 
     {
       name: "ssr",
+
+      role: "warga",
+
       url:
-        "http://localhost:3000/dashboard-ssr",
+        `${BASE_URL}/dashboard-ssr`,
     },
 
     {
       name: "ssg",
+
+      role: "warga",
+
       url:
-        "http://localhost:3000/dashboard-ssg",
+        `${BASE_URL}/dashboard-ssg`,
     },
   ],
 }).catch(console.error);

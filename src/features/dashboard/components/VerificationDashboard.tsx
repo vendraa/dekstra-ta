@@ -1,18 +1,14 @@
 "use client";
 
+import { ReactNode } from "react";
 import { StatsCard } from "@/components/ui/Card/StatsCard";
 import { ProgressBar, ProgressItem } from "@/components/ui/Chart/ProgressBar";
 import { ChartBar, BarChartDataItem } from "@/components/ui/Chart/BarChart";
 import { PageCard } from "@/components/ui/Card/PageCard";
-import Table from "@/components/ui/Table/Table";
 import Button from "@/components/ui/Button/Button";
 import Link from "next/link";
-
-import { ColumnDef } from "@tanstack/react-table";
 import { Users, UserCog, FileText, LucideIcon } from "lucide-react";
-import { FetchDataFn } from "@/components/ui/Table/types";
 
-// 🔑 Mapping icon key → komponen, RESOLVE DI CLIENT
 const ICON_MAP: Record<string, LucideIcon> = {
   users: Users,
   userCog: UserCog,
@@ -22,39 +18,32 @@ const ICON_MAP: Record<string, LucideIcon> = {
 type StatItem = {
   label: string;
   value: number;
-  iconKey: string;   // ← terima string, bukan komponen
+  iconKey: string;
 };
 
-type Props<T extends object> = {
+type Props = {
   stats: StatItem[];
   progressItems: ProgressItem[];
   chartData: BarChartDataItem[];
-
   previewTitle: string;
   previewLink: string;
-
-  columns: ColumnDef<T>[];
-  fetchPreview?: FetchDataFn<T>;
-  previewData?: T[];
+  previewSlot: ReactNode;  // ← terima ReactNode, bukan fetchPreview/previewData
 };
 
-export default function VerificationDashboard<T extends object>({
+export default function VerificationDashboard({
   stats,
   progressItems,
   chartData,
   previewTitle,
   previewLink,
-  columns,
-  fetchPreview,
-  previewData,
-}: Props<T>) {
+  previewSlot,
+}: Props) {
   return (
     <div className="space-y-6">
       {/* Stats */}
       <div className="grid grid-cols-3 gap-5">
         {stats.map((stat) => {
-          const Icon = ICON_MAP[stat.iconKey] ?? FileText; // fallback aman
-
+          const Icon = ICON_MAP[stat.iconKey] ?? FileText;
           return (
             <StatsCard
               key={stat.label}
@@ -79,29 +68,7 @@ export default function VerificationDashboard<T extends object>({
             </PageCard.Header>
 
             <PageCard.Content>
-              {previewData ? (
-                <Table<T>
-                  columns={columns}
-                  data={previewData}
-                  mode="client"
-                  initialPageSize={5}
-                  showSearch={false}
-                  showPageSize={false}
-                  showPagination={false}
-                />
-              ) : (
-                fetchPreview && (
-                  <Table<T>
-                    columns={columns}
-                    mode="server"
-                    fetchData={fetchPreview}
-                    initialPageSize={5}
-                    showSearch={false}
-                    showPageSize={false}
-                    showPagination={false}
-                  />
-                )
-              )}
+              {previewSlot}  {/* ← render slot langsung */}
             </PageCard.Content>
           </PageCard.Root>
         </div>

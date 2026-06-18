@@ -2,24 +2,26 @@ import fs from "node:fs";
 import path from "node:path";
 
 import {
-  DEFAULT_ROLE,
   DEVICE_SCALE_FACTOR,
   LIGHTHOUSE_CONFIG_FILE,
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
 } from "./constants";
 
-export function createLighthouseConfig() {
-  const token =
-    process.env.LIGHTHOUSE_AUTH_TOKEN;
+import {
+  LighthouseRole,
+  getAuthCookie,
+} from "./auth";
 
-  const role =
-    process.env.LIGHTHOUSE_AUTH_ROLE ??
-    DEFAULT_ROLE;
+export function createLighthouseConfig(
+  userRole: LighthouseRole
+) {
+  const auth =
+    getAuthCookie(userRole);
 
-  if (!token) {
+  if (!auth.token) {
     throw new Error(
-      "LIGHTHOUSE_AUTH_TOKEN tidak ditemukan di .env"
+      `Token untuk role '${userRole}' tidak ditemukan`
     );
   }
 
@@ -29,7 +31,7 @@ export function createLighthouseConfig() {
     settings: {
       extraHeaders: {
         Cookie:
-          `access_token=${token}; role=${role}`,
+          `access_token=${auth.token}; role=${auth.role}`,
       },
 
       formFactor: "desktop",
@@ -43,7 +45,8 @@ export function createLighthouseConfig() {
         disabled: false,
       },
 
-      throttlingMethod: "provided",
+      throttlingMethod:
+        "provided",
 
       throttling: {
         rttMs: 0,

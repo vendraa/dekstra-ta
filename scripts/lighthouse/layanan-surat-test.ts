@@ -6,26 +6,38 @@ import {
 
 config({ path: ".env" });
 
+const BASE_URL =
+  process.env.LIGHTHOUSE_BASE_URL!;
+
 runRenderingTest({
   testName: "layanan-surat",
 
   pages: [
     {
       name: "csr",
+
+      role: "warga",
+
       url:
-        "http://localhost:3000/pengajuan-baru-csr",
+        `${BASE_URL}/pengajuan-baru-csr`,
     },
 
     {
       name: "ssr",
+
+      role: "warga",
+
       url:
-        "http://localhost:3000/pengajuan-baru-ssr",
+        `${BASE_URL}/pengajuan-baru-ssr`,
     },
 
     {
       name: "ssg",
+
+      role: "warga",
+
       url:
-        "http://localhost:3000/pengajuan-baru-ssg",
+        `${BASE_URL}/pengajuan-baru-ssg`,
     },
   ],
 }).catch(console.error);

@@ -1,13 +1,12 @@
 import VerificationDashboard from "../components/VerificationDashboard";
+import { VerifikasiAdminPreviewSSR } from "@/features/requests/ui/table/verifikasi-admin/VerifikasiAdminPreviewSSR";
 import { getDashboardServer } from "../services/dashboard.server.service";
 import { mapAdminDashboard } from "../mapper/admin-dashboard.mapper";
-import { validasiAdminPreviewColumns } from "@/features/requests/ui/table/verifikasi-admin/preview-columns";
 import { getVerifikasiAdminServer } from "@/services/dashboard-admin/verifikasi-admin.server.service";
 
 export default async function AdminDashboardSSR() {
   const data = await getDashboardServer("no-store");
   const verifikasiData = await getVerifikasiAdminServer("no-store");
-
   const mapped = mapAdminDashboard(data);
 
   const statsWithIcon = mapped.stats.map((s) => ({
@@ -27,8 +26,9 @@ export default async function AdminDashboardSSR() {
       chartData={mapped.chartData}
       previewTitle="Surat yang Perlu Diverifikasi"
       previewLink="/admin/surat/verifikasi"
-      columns={validasiAdminPreviewColumns}
-      previewData={verifikasiData}
+      previewSlot={
+        <VerifikasiAdminPreviewSSR data={verifikasiData} />
+      }
     />
   );
 }

@@ -1,19 +1,12 @@
-import {
-  getVerifikasiAdminBuild,
-} from "@/services/dashboard-admin/verifikasi-admin.static.service";
+import { LetterRequest } from "@/features/requests/types/types";
+import { VerifikasiAdminPreviewContent } from "./VerifikasiAdminPreviewContent";
 
-import {
-  VerifikasiAdminPreviewContent,
-} from "./VerifikasiAdminPreviewContent";
+interface Props {
+  data: LetterRequest[];
+}
 
-export async function VerifikasiAdminPreviewSSG() {
-
-  const data =
-    await getVerifikasiAdminBuild();
-
+export function VerifikasiAdminPreviewSSG({ data }: Props) {
   return (
-    <VerifikasiAdminPreviewContent
-      data={data.slice(0, 5)}
-    />
+    <VerifikasiAdminPreviewContent data={data.slice(0, 5)} />
   );
 }
