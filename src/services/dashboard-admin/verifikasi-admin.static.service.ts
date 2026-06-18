@@ -18,7 +18,7 @@ export async function getVerifikasiAdminBuild():
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/admin/verifikasi/`,
+      `${process.env.NEXT_PUBLIC_API_URL}/riwayat-persetujuan/list/`,
       {
         headers: {
           Authorization:
