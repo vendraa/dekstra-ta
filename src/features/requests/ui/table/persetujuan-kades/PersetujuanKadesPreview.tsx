@@ -7,7 +7,7 @@ import { persetujuanKadesPreviewColumns } from "./preview-columns";
 import Button from "@/components/ui/Button/Button";
 import { useVerifikasiRequests } from "@/features/requests/hooks/useVerifikasi";
 
-export function ValidasiRTPreview() {
+export function PersetujuanKadesPreview() {
   const fetchData = useVerifikasiRequests();
 
   return (

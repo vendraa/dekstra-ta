@@ -7,7 +7,7 @@ import { validasiRWPreviewColumns } from "./preview-columns";
 import Button from "@/components/ui/Button/Button";
 import { useVerifikasiRequests } from "@/features/requests/hooks/useVerifikasi";
 
-export function ValidasiRTPreview() {
+export function ValidasiRWPreview() {
   const fetchData = useVerifikasiRequests();
 
   return (
